@@ -1,6 +1,8 @@
 import React from "react"
 
-import { Text, Title } from "@/components/base"
+import { chain } from "@/lib/chain"
+import { GenesisNFTMinterAddress } from "@/hooks/useGenesisNFTMinter"
+import { Link, Text, Title } from "@/components/base"
 import { MyNfts } from "@/components/custom/my-nfts"
 import { Participate } from "@/components/custom/participate"
 import { TiersShowcase } from "@/components/custom/tier-showcase"
@@ -42,6 +44,16 @@ export default function IndexPage() {
             6 Months (linear)
             <br />
             10% unlock at TGE
+          </td>
+        </tr>
+        <tr>
+          <td>Contract Address</td>
+          <td className="break-all">
+            <Link
+              href={`${chain.blockExplorers.default.url}/address/${GenesisNFTMinterAddress}`}
+            >
+              {GenesisNFTMinterAddress}
+            </Link>
           </td>
         </tr>
       </table>
