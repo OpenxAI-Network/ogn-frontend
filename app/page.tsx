@@ -1,4 +1,5 @@
 import React from "react"
+import { GenesisNFTContract } from "@/contracts/GenesisNFT"
 
 import { chain } from "@/lib/chain"
 import { GenesisNFTMinterAddress } from "@/hooks/useGenesisNFTMinter"
@@ -39,12 +40,22 @@ export default function IndexPage() {
           </td>
         </tr>
         <tr>
-          <td>Contract Address</td>
+          <td>Minting Contract</td>
           <td className="break-all">
             <Link
               href={`${chain.blockExplorers.default.url}/address/${GenesisNFTMinterAddress}`}
             >
               {GenesisNFTMinterAddress}
+            </Link>
+          </td>
+        </tr>
+        <tr>
+          <td>ERC721 Collection</td>
+          <td className="break-all">
+            <Link
+              href={`${chain.blockExplorers.default.url}/token/${GenesisNFTContract.address}`}
+            >
+              {GenesisNFTContract.address}
             </Link>
           </td>
         </tr>
