@@ -9,7 +9,7 @@ import { chain } from "@/lib/chain"
 
 export const GenesisNFTMinterAddress =
   chain.id === 1
-    ? zeroAddress
+    ? ("0x7BEA4ec96E931a901808907748F9678589048689" as const)
     : ("0x67d09fFa416CA1711e2cebE1C724C76fa77836df" as const)
 export const StableCoinAddress =
   chain.id === 1
