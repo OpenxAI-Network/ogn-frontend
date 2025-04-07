@@ -25,7 +25,7 @@ export function Text({
 export function Link({ href, children }: { href: string; children: any }) {
   return (
     <NextLink
-      className="text-blue-600 hover:text-blue-800 underline"
+      className="text-blue-600 underline hover:text-blue-800"
       href={href}
       target="_blank"
     >

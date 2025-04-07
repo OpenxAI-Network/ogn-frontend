@@ -5,8 +5,8 @@ import { siteConfig } from "@/config/site"
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-black h-20 flex items-center">
-      <Link href="/" className="flex items-center space-x-2 ml-2">
+    <header className="sticky top-0 z-40 flex h-20 w-full items-center border-b bg-black">
+      <Link href="/" className="ml-2 flex items-center space-x-2">
         <Image
           alt="Logo"
           src="/icon.png"
@@ -14,7 +14,7 @@ export function Header() {
           height={35}
           priority={true}
         />
-        <span className="inline-block font-bold text-white text-xl">
+        <span className="inline-block text-xl font-bold text-white">
           {siteConfig.name}
         </span>
       </Link>

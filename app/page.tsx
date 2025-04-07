@@ -7,7 +7,7 @@ import { TiersShowcase } from "@/components/custom/tier-showcase"
 
 export default function IndexPage() {
   return (
-    <section className="container inset-x-0 grid items-center gap-3 mb-6">
+    <section className="container inset-x-0 mb-6 grid items-center gap-3">
       <Title>OpenxAI Genesis</Title>
       <Text>
         Thank you for believing in our vision to build a permissionless AI

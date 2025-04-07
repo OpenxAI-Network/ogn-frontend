@@ -96,16 +96,16 @@ export function Participate() {
       </div>
       <div>
         <Subtitle>Legend</Subtitle>
-        <div className="flex gap-2 place-items-center">
-          <div className="rounded-full size-4 bg-red-500" />
+        <div className="flex place-items-center gap-2">
+          <div className="size-4 rounded-full bg-red-500" />
           <span>Already claimed</span>
         </div>
-        <div className="flex gap-2 place-items-center">
-          <div className="rounded-full size-4 bg-orange-500" />
+        <div className="flex place-items-center gap-2">
+          <div className="size-4 rounded-full bg-orange-500" />
           <span>Currently selected</span>
         </div>
-        <div className="flex gap-2 place-items-center">
-          <div className="rounded-full size-4 bg-green-500" />
+        <div className="flex place-items-center gap-2">
+          <div className="size-4 rounded-full bg-green-500" />
           <span>Available for selection</span>
         </div>
       </div>
@@ -236,11 +236,11 @@ function TierAmountSelector({
         />
       </div>
       {myTierData && (
-        <div className="flex gap-1 flex-wrap">
+        <div className="flex flex-wrap gap-1">
           {new Array(myTierData.maxMinted).fill(0).map((_, i) => (
             <div
               className={cn(
-                "rounded-full size-4",
+                "size-4 rounded-full",
                 myTierData.currentlyMinted > i
                   ? "bg-red-500"
                   : myTierData.currentlyMinted + value > i
