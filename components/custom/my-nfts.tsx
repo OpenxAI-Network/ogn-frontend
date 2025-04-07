@@ -23,7 +23,7 @@ export function MyNfts() {
   const nfts = useOwnedNfts()
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-1">
       <Title>Your OpenxAI Genesis NFTs</Title>
       {nfts && nfts.length > 0 ? (
         <div className="grid grid-cols-3 gap-1 max-md:grid-cols-1">
