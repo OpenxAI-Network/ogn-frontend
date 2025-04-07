@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react"
 import { GenesisNFTMinterContract } from "@/contracts/GenesisNFTMinter"
 import { useQueryClient } from "@tanstack/react-query"
+import { useWeb3Modal } from "@web3modal/wagmi/react"
 import { erc20Abi, formatUnits, zeroAddress } from "viem"
 import { useAccount, useReadContract } from "wagmi"
 
@@ -21,6 +22,7 @@ import { Input } from "../ui/input"
 
 export function Participate() {
   const { address } = useAccount()
+  const { open } = useWeb3Modal()
   const tierData = useTiers()
   const { performTransaction, performingTransaction } = usePerformTransaction({
     chainId: chain.id,
@@ -128,6 +130,11 @@ export function Participate() {
         <Button
           className="max-w-60"
           onClick={() => {
+            if (!address) {
+              open()
+              return
+            }
+
             performTransaction({
               transaction: async () => {
                 return {
@@ -150,6 +157,11 @@ export function Participate() {
       <Button
         className="max-w-60"
         onClick={() => {
+          if (!address) {
+            open()
+            return
+          }
+
           performTransaction({
             transaction: async () => {
               return {
