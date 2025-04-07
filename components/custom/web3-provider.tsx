@@ -47,6 +47,9 @@ const config = defaultWagmiConfig({
     ]),
     [sepolia.id]: http("https://sepolia.gateway.tenderly.co"),
   },
+  auth: {
+    email: false,
+  },
 })
 
 // Create modal
