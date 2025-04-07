@@ -4,7 +4,7 @@ import { useMemo, useState } from "react"
 import { GenesisNFTMinterContract } from "@/contracts/GenesisNFTMinter"
 import { useQueryClient } from "@tanstack/react-query"
 import { useWeb3Modal } from "@web3modal/wagmi/react"
-import { erc20Abi, formatUnits, zeroAddress } from "viem"
+import { erc20Abi, formatUnits, parseAbi, zeroAddress } from "viem"
 import { useAccount, useReadContract } from "wagmi"
 
 import { chain } from "@/lib/chain"
@@ -138,7 +138,9 @@ export function Participate() {
             performTransaction({
               transaction: async () => {
                 return {
-                  abi: erc20Abi,
+                  abi: parseAbi([
+                    "function approve(address spender, uint256 amount)",
+                  ]),
                   address: StableCoinAddress,
                   functionName: "approve",
                   args: [GenesisNFTMinterAddress, usdtRequired],
