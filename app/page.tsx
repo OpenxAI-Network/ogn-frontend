@@ -27,10 +27,6 @@ export default function IndexPage() {
       </div>
       <table className="mt-6 w-full">
         <tr>
-          <td>Payment and Confirmation Phase</td>
-          <td>11:59 PM UTC, April 8, 2025 - 11:59 PM UTC, April 20, 2025</td>
-        </tr>
-        <tr>
           <td>Accepted Payment Methods</td>
           <td>USDT ERC20 (Ethereum Mainnet)</td>
         </tr>
