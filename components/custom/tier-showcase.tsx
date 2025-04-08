@@ -43,7 +43,7 @@ export function TiersShowcase() {
           <Text className="text-black/70">Token Price: {tier.tokenPrice}</Text>
           {tierData && (
             <Text>
-              {tierData[i].maxMinted - tierData[i].currentlyMinted} Left
+              {tierData[2 - i].maxMinted - tierData[2 - i].currentlyMinted} Left
             </Text>
           )}
         </div>
