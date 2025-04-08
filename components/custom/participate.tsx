@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import Image from "next/image"
 import { GenesisNFTMinterContract } from "@/contracts/GenesisNFTMinter"
 import { useQueryClient } from "@tanstack/react-query"
 import { useWeb3Modal } from "@web3modal/wagmi/react"
@@ -18,7 +19,32 @@ import { usePerformTransaction } from "@/hooks/usePerformTransaction"
 
 import { Subtitle, Text, Title } from "../base"
 import { Button } from "../ui/button"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card"
 import { Input } from "../ui/input"
+
+const tiers = [
+  {
+    stableCoins: 10_000,
+    discount: "20%",
+    tokenPrice: "$0.12",
+  },
+  {
+    stableCoins: 25_000,
+    discount: "33%",
+    tokenPrice: "$0.10",
+  },
+  {
+    stableCoins: 50_000,
+    discount: "50%",
+    tokenPrice: "$0.07",
+  },
+]
 
 export function Participate() {
   const { address } = useAccount()
@@ -29,9 +55,7 @@ export function Participate() {
   })
   const queryClient = useQueryClient()
 
-  const [tier3Amount, setTier3Amount] = useState<number>(0)
-  const [tier2Amount, setTier2Amount] = useState<number>(0)
-  const [tier1Amount, setTier1Amount] = useState<number>(0)
+  const [tierAmount, setTierAmount] = useState<number[]>([0, 0, 0])
 
   const usdtRequired = useMemo(() => {
     if (!tierData) {
@@ -39,14 +63,14 @@ export function Participate() {
     }
 
     return (
-      BigInt(isNaN(tier1Amount) ? 0 : tier1Amount) *
+      BigInt(isNaN(tierAmount[0]) ? 0 : tierAmount[0]) *
         tierData[0].stableCoinsPerNft +
-      BigInt(isNaN(tier2Amount) ? 0 : tier2Amount) *
+      BigInt(isNaN(tierAmount[1]) ? 0 : tierAmount[1]) *
         tierData[1].stableCoinsPerNft +
-      BigInt(isNaN(tier3Amount) ? 0 : tier3Amount) *
+      BigInt(isNaN(tierAmount[2]) ? 0 : tierAmount[2]) *
         tierData[2].stableCoinsPerNft
     )
-  }, [tierData, tier1Amount, tier2Amount, tier3Amount])
+  }, [tierData, tierAmount])
 
   const { data: usdtBalance } = useReadContract({
     abi: erc20Abi,
@@ -71,43 +95,71 @@ export function Participate() {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col">
-        <Title>Participate</Title>
-        <div className="flex flex-col gap-2">
-          <TierAmountSelector
-            tier={3}
-            value={tier3Amount}
-            setValue={setTier3Amount}
-            tierData={tierData}
-            disabled={performingTransaction}
-          />
-          <TierAmountSelector
-            tier={2}
-            value={tier2Amount}
-            setValue={setTier2Amount}
-            tierData={tierData}
-            disabled={performingTransaction}
-          />
-          <TierAmountSelector
-            tier={1}
-            value={tier1Amount}
-            setValue={setTier1Amount}
-            tierData={tierData}
-            disabled={performingTransaction}
-          />
+        <div className="grid grid-cols-3 gap-5 max-md:grid-cols-1">
+          {tiers.map((tier, i) => (
+            <Card className="rounded-3xl bg-gray-300/20" key={i}>
+              <CardHeader className="flex-row gap-2 place-items-center">
+                <Image
+                  className="aspect-square grow-0 shrink-0 w-16 h-16"
+                  alt={`Tier ${3 - i} OpenxAI NFT`}
+                  src={`https://erc721.openxai.org/image/ogn/tier${3 - i}.png`}
+                  width={64}
+                  height={64}
+                />
+                <CardTitle>
+                  OpenxAI Genesis ({Math.round(tier.stableCoins / 1000)}K)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-1">
+                <Text className="text-lg text-black/90">
+                  Price: {tier.stableCoins.toLocaleString("en-us")} USDT
+                </Text>
+                <Text className="text-lg text-black/90">
+                  Network: Ethereum Mainnet
+                </Text>
+                <Text className="text-lg text-black/90">
+                  {tier.discount} Discount
+                </Text>
+                <Text className="text-lg text-black/90">
+                  Token Price: {tier.tokenPrice}
+                </Text>
+              </CardContent>
+              <CardFooter className="flex-col gap-2 items-start">
+                <TierAmountSelector
+                  tier={3 - i}
+                  value={tierAmount[2 - i]}
+                  setValue={(amount) =>
+                    setTierAmount(
+                      tierAmount.map((t, j) => (j === 2 - i ? amount : t))
+                    )
+                  }
+                  tierData={tierData}
+                  disabled={performingTransaction}
+                />
+                {tierData && (
+                  <Text>
+                    {tierData[2 - i].maxMinted -
+                      tierData[2 - i].currentlyMinted}{" "}
+                    Left
+                  </Text>
+                )}
+              </CardFooter>
+            </Card>
+          ))}
         </div>
       </div>
       <div>
         <Subtitle>Legend</Subtitle>
         <div className="flex place-items-center gap-2">
-          <div className="size-4 rounded-full bg-red-500" />
+          <div className="size-3.5 rounded-full bg-red-500" />
           <span>Already claimed</span>
         </div>
         <div className="flex place-items-center gap-2">
-          <div className="size-4 rounded-full bg-orange-500" />
+          <div className="size-3.5 rounded-full bg-orange-500" />
           <span>Currently selected</span>
         </div>
         <div className="flex place-items-center gap-2">
-          <div className="size-4 rounded-full bg-green-500" />
+          <div className="size-3.5 rounded-full bg-green-500" />
           <span>Available for selection</span>
         </div>
       </div>
@@ -170,13 +222,11 @@ export function Participate() {
                 abi: GenesisNFTMinterContract.abi,
                 address: GenesisNFTMinterAddress,
                 functionName: "mint",
-                args: [[tier1Amount, tier2Amount, tier3Amount]],
+                args: [tierAmount],
               }
             },
             onConfirmed() {
-              setTier1Amount(0)
-              setTier2Amount(0)
-              setTier3Amount(0)
+              setTierAmount([0, 0, 0])
               queryClient.invalidateQueries({ queryKey: ["nfts"] })
               queryClient.invalidateQueries({
                 queryKey: [GenesisNFTMinterAddress],
@@ -212,19 +262,9 @@ function TierAmountSelector({
   const myTierData = tierData?.at(tier - 1)
 
   return (
-    <div className="flex flex-col gap-1">
-      <div className="flex place-items-center gap-2">
-        <Text className="shrink-0">
-          OpenxAI Genesis{" "}
-          {tier === 3
-            ? "(10K)"
-            : tier === 2
-              ? "(25K)"
-              : tier === 1
-                ? "(50K)"
-                : ""}{" "}
-          NFT x
-        </Text>
+    <div className="flex flex-col gap-2 w-full">
+      <div className="flex place-items-center gap-2 place-content-between">
+        <Text className="shrink-0 font-semibold text-lg">Participate</Text>
         <Input
           className="max-w-20"
           type="number"
@@ -254,7 +294,7 @@ function TierAmountSelector({
           {new Array(myTierData.maxMinted).fill(0).map((_, i) => (
             <div
               className={cn(
-                "size-4 rounded-full",
+                "size-3.5 rounded-full",
                 myTierData.currentlyMinted > i
                   ? "bg-red-500"
                   : myTierData.currentlyMinted + value > i

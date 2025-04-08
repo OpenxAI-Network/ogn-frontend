@@ -34,7 +34,16 @@ export function MyNfts() {
               <Card key={i}>
                 <CardHeader>
                   <CardTitle>#{nft.tokenId.toString()}</CardTitle>
-                  <CardDescription>Tier {tier}</CardDescription>
+                  <CardDescription>
+                    OpenxAI Genesis{" "}
+                    {tier === "3"
+                      ? "(10K)"
+                      : tier === "2"
+                        ? "(25K)"
+                        : tier === "1"
+                          ? "(50K)"
+                          : ""}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="flex place-content-center">
