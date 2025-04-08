@@ -50,7 +50,7 @@ export default function IndexPage() {
           </td>
         </tr>
         <tr>
-          <td>ERC721 Collection</td>
+          <td>Participation Proof (ERC721 NFT)</td>
           <td className="break-all">
             <Link
               href={`${chain.blockExplorers.default.url}/token/${GenesisNFTContract.address}`}
