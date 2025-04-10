@@ -188,6 +188,7 @@ export function Participate() {
             }
 
             performTransaction({
+              transactionName: "Approve USDT spending",
               transaction: async () => {
                 return {
                   abi: parseAbi([
@@ -217,6 +218,7 @@ export function Participate() {
           }
 
           performTransaction({
+            transactionName: "Mint OpenxAI Genesis NFTs",
             transaction: async () => {
               return {
                 abi: GenesisNFTMinterContract.abi,
